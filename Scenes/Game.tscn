@@ -1,11 +1,67 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://Assets/stars.jpeg" type="Texture" id=2]
-[ext_resource path="res://Assets/enemy_1.png" type="Texture" id=3]
+[ext_resource path="res://Scripts/Enemies.gd" type="Script" id=3]
 [ext_resource path="res://Assets/player.png" type="Texture" id=4]
-[ext_resource path="res://Assets/meteor_1.png" type="Texture" id=6]
+[ext_resource path="res://Scripts/Bullets.gd" type="Script" id=5]
+[ext_resource path="res://Scripts/Meteors.gd" type="Script" id=6]
+[ext_resource path="res://Assets/OstrichSans-Heavy copy.otf" type="DynamicFontData" id=7]
 [ext_resource path="res://Scripts/HUD.gd" type="Script" id=8]
+[ext_resource path="res://Assets/smoke.tres" type="Gradient" id=9]
+[ext_resource path="res://Assets/210737__edtijo__night-soft-techno.wav" type="AudioStream" id=10]
+
+[sub_resource type="Curve" id=6]
+min_value = -360.0
+max_value = 360.0
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 94.7589 ), 265.932, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=7]
+curve = SubResource( 6 )
+
+[sub_resource type="GradientTexture" id=10]
+gradient = ExtResource( 9 )
+
+[sub_resource type="Curve" id=8]
+_data = [ Vector2( 0.0126582, 0.622519 ), 0.0, -0.249802, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=9]
+curve = SubResource( 8 )
+
+[sub_resource type="ParticlesMaterial" id=5]
+render_priority = 1
+emission_shape = 3
+emission_point_count = 1
+flag_disable_z = true
+spread = 13.97
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 134.95
+angular_velocity = -39.66
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel = 37.93
+linear_accel_random = 0.22
+damping = 2.3
+damping_random = 0.02
+angle = 45.0
+angle_curve = SubResource( 7 )
+scale = 15.0
+scale_random = 0.34
+scale_curve = SubResource( 9 )
+color_ramp = SubResource( 10 )
+
+[sub_resource type="DynamicFont" id=1]
+size = 30
+outline_size = 1
+outline_color = Color( 0.592157, 0.145098, 0.643137, 1 )
+use_mipmaps = true
+font_data = ExtResource( 7 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 30
+outline_size = 1
+outline_color = Color( 0.0941176, 0.0901961, 0.909804, 1 )
+font_data = ExtResource( 7 )
 
 [node name="Game" type="Node2D"]
 
@@ -18,20 +74,29 @@ texture = ExtResource( 2 )
 centered = false
 
 [node name="ColorRect" type="ColorRect" parent="Background"]
+margin_top = 16.0
 margin_right = 1022.0
-margin_bottom = 672.0
+margin_bottom = 688.0
 color = Color( 0, 0, 0, 0.509804 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Bullets" type="Node2D" parent="."]
+script = ExtResource( 5 )
+
+[node name="Timer" type="Timer" parent="Bullets"]
+wait_time = 0.6
+one_shot = true
 
 [node name="Enemy Bullets" type="Node2D" parent="."]
 position = Vector2( -3, 0 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="Player" type="KinematicBody2D" parent="."]
-position = Vector2( 482.14, 560 )
+position = Vector2( 480, 560 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_group_": true
@@ -42,46 +107,30 @@ position = Vector2( 6.20004, 7.87503 )
 scale = Vector2( 0.34, 0.34 )
 texture = ExtResource( 4 )
 
+[node name="Particles2D" type="Particles2D" parent="Player/Sprite"]
+show_behind_parent = true
+position = Vector2( -2.94116, 145 )
+rotation = 1.5708
+amount = 100
+local_coords = false
+process_material = SubResource( 5 )
+
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Player"]
 position = Vector2( 6.20004, 7.87503 )
 scale = Vector2( 0.34, 0.34 )
 polygon = PoolVector2Array( 16, -148.4, 16, -146.1, 26, -130.1, 26, -126.5, 38, -83.8, 38, -60.9, 45, -63.3, 45, -60.5, 53, -54.5, 53, -51.5, 53.8, -43.5, 59, -37.2, 59, 6.60001, 56, 8.60001, 56, 27.5, 56.9, 27.5, 59, 61.5, 59, 97.3, 57.5, 102.5, 53.1, 102.5, 38, 103.4, 38, 116.5, 41.3, 142.5, 39.3, 142.5, 33.1, 157.5, 17, 157.5, 16.2, 147.5, 12.8, 141.5, 9.9, 141.5, 8.9, 157.5, -6, 157.5, -9, 154.3, -9, 141.5, -10.2, 141.5, -14, 146.2, -14, 154.8, -14.9, 157.5, -31, 157.5, -39, 139.9, -39, 129, -35, 121, -35, 118.5, -36.8, 103.5, -54.7, 103.5, -59, 100.1, -59, 30.5, -57, 30.5, -55, 27.8, -55, 9.5, -59, 6.5, -59, -37.5, -57, -37.5, -54, -41.2, -54, -51, -51.2, -56.5, -49.8, -56.5, -43.8, -62.5, -38.3, -62.5, -37, -61.5, -37, -80.8, -23.5, -132.5, -22.2, -132.5, -13.2, -150.5, -11.8, -150.5, -5, -157.3, 6, -157.5 )
 
 [node name="Meteors" type="Node2D" parent="."]
-visible = false
+script = ExtResource( 6 )
 
-[node name="Meteor" type="RigidBody2D" parent="Meteors"]
-position = Vector2( -1, -100 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="Sprite" type="Sprite" parent="Meteors/Meteor"]
-scale = Vector2( 0.3, 0.3 )
-texture = ExtResource( 6 )
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Meteors/Meteor"]
-scale = Vector2( 0.3, 0.3 )
-polygon = PoolVector2Array( 73, -87.8, 73, -86.1, 107, -32.3, 107, 31.6, 105.9, 46.5, 104.1, 46.5, 70.1, 104.5, 66.3, 104.5, 10.3, 113.5, -5.8, 113.5, -69, 96, -69, 94.1, -106, 35.1, -106, 20.5, -107, 1.5, -107, -38.5, -61.9, -85.5, -59.5, -85.5, -2.6, -113.5, 11.7, -113.5 )
+[node name="Timer" type="Timer" parent="Meteors"]
+autostart = true
 
 [node name="Enemies" type="Node2D" parent="."]
-visible = false
+script = ExtResource( 3 )
 
-[node name="Enemy" type="KinematicBody2D" parent="Enemies"]
-position = Vector2( 0, -100 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="Sprite" type="Sprite" parent="Enemies/Enemy"]
-rotation = 3.14159
-scale = Vector2( 0.45, 0.45 )
-texture = ExtResource( 3 )
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Enemies/Enemy"]
-rotation = -3.14159
-scale = Vector2( 0.45, 0.45 )
-polygon = PoolVector2Array( 49, -52.1, 49, -35, 50.8, -35, 58, -27.8, 58, -15.4, 63, -4.7, 63, 26, 43.8, 54, 17, 54, 17, 25.1, 11.7, 29, -12.6, 29, -18, 25.6, -18, 54, -38, 54, -39, 54, -44, 54, -44, 52.7, -63, 27.4, -63, -4.7, -58, -15.4, -58, -29, -55.7, -29, -49, -34, -49, -52.1, -46.1, -54, -26.9, -54, -24, -52.1, -24, -35, -19, -35, -16, -31, -3.8, -43, 3, -43, 3, -41, 15.3, -31.1, 19.2, -35, 24, -35, 24, -51.8, 26.2, -54, 46.1, -54 )
+[node name="Timer" type="Timer" parent="Enemies"]
+autostart = true
 
 [node name="Explosions" type="Node2D" parent="."]
 
@@ -89,10 +138,11 @@ polygon = PoolVector2Array( 49, -52.1, 49, -35, 50.8, -35, 58, -27.8, 58, -15.4,
 script = ExtResource( 8 )
 
 [node name="Health" type="Label" parent="HUD"]
-margin_left = 16.0
-margin_top = 8.0
-margin_right = 88.0
-margin_bottom = 32.0
+margin_left = 24.0
+margin_top = 32.0
+margin_right = 105.0
+margin_bottom = 56.0
+custom_fonts/font = SubResource( 1 )
 text = "Health: "
 align = 1
 valign = 1
@@ -101,15 +151,23 @@ __meta__ = {
 }
 
 [node name="Score" type="Label" parent="HUD"]
-margin_left = 936.0
-margin_top = 8.0
-margin_right = 1008.0
-margin_bottom = 32.0
+margin_left = 896.0
+margin_top = 32.0
+margin_right = 968.0
+margin_bottom = 56.0
+custom_fonts/font = SubResource( 2 )
 text = "Score:"
 align = 1
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 10 )
+autoplay = true
+[connection signal="timeout" from="Bullets/Timer" to="Bullets" method="_on_Timer_timeout"]
 [connection signal="health_changed" from="Player" to="HUD" method="_on_Player_health_changed"]
 [connection signal="score_changed" from="Player" to="HUD" method="_on_Player_score_changed"]
+[connection signal="timeout" from="Meteors/Timer" to="Meteors" method="_on_Timer_timeout"]
+[connection signal="timeout" from="Enemies/Timer" to="Enemies" method="_on_Timer_timeout"]
