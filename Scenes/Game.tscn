@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://Scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://Assets/stars.jpeg" type="Texture" id=2]
@@ -11,24 +11,24 @@
 [ext_resource path="res://Assets/smoke.tres" type="Gradient" id=9]
 [ext_resource path="res://Assets/210737__edtijo__night-soft-techno.wav" type="AudioStream" id=10]
 
-[sub_resource type="Curve" id=6]
+[sub_resource type="Curve" id=1]
 min_value = -360.0
 max_value = 360.0
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 94.7589 ), 265.932, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=7]
-curve = SubResource( 6 )
+[sub_resource type="CurveTexture" id=2]
+curve = SubResource( 1 )
 
-[sub_resource type="GradientTexture" id=10]
+[sub_resource type="GradientTexture" id=3]
 gradient = ExtResource( 9 )
 
-[sub_resource type="Curve" id=8]
+[sub_resource type="Curve" id=4]
 _data = [ Vector2( 0.0126582, 0.622519 ), 0.0, -0.249802, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=9]
-curve = SubResource( 8 )
+[sub_resource type="CurveTexture" id=5]
+curve = SubResource( 4 )
 
-[sub_resource type="ParticlesMaterial" id=5]
+[sub_resource type="ParticlesMaterial" id=6]
 render_priority = 1
 emission_shape = 3
 emission_point_count = 1
@@ -44,20 +44,60 @@ linear_accel_random = 0.22
 damping = 2.3
 damping_random = 0.02
 angle = 45.0
-angle_curve = SubResource( 7 )
+angle_curve = SubResource( 2 )
 scale = 15.0
 scale_random = 0.34
-scale_curve = SubResource( 9 )
-color_ramp = SubResource( 10 )
+scale_curve = SubResource( 5 )
+color_ramp = SubResource( 3 )
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="Curve" id=9]
+min_value = -360.0
+max_value = 360.0
+_data = [ Vector2( 0.126582, 100.598 ), 0.0, 0.0, 0, 0, Vector2( 1, 120.234 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=10]
+curve = SubResource( 9 )
+
+[sub_resource type="Gradient" id=11]
+offsets = PoolRealArray( 0, 0.266667, 0.962963 )
+colors = PoolColorArray( 0.977706, 0.984375, 0.130737, 1, 0.960938, 0.591026, 0.0675659, 1, 0.589844, 0.0161285, 0.0161285, 1 )
+
+[sub_resource type="GradientTexture" id=12]
+gradient = SubResource( 11 )
+
+[sub_resource type="Curve" id=13]
+_data = [ Vector2( 0, 0.667926 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.395199 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=14]
+curve = SubResource( 13 )
+
+[sub_resource type="ParticlesMaterial" id=15]
+flag_disable_z = true
+spread = 34.66
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 80.46
+angular_velocity = -513.1
+angular_velocity_random = 0.43
+angular_velocity_curve = SubResource( 10 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel = -4.6
+damping = 25.29
+angle = 66.2
+angle_random = 0.08
+scale = 8.51
+scale_random = 0.26
+scale_curve = SubResource( 14 )
+color_ramp = SubResource( 12 )
+
+[sub_resource type="DynamicFont" id=7]
 size = 30
 outline_size = 1
 outline_color = Color( 0.592157, 0.145098, 0.643137, 1 )
 use_mipmaps = true
 font_data = ExtResource( 7 )
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=8]
 size = 30
 outline_size = 1
 outline_color = Color( 0.0941176, 0.0901961, 0.909804, 1 )
@@ -113,7 +153,26 @@ position = Vector2( -2.94116, 145 )
 rotation = 1.5708
 amount = 100
 local_coords = false
-process_material = SubResource( 5 )
+process_material = SubResource( 6 )
+
+[node name="Particles2D2" type="Particles2D" parent="Player/Sprite"]
+show_behind_parent = true
+position = Vector2( -45, 100 )
+rotation = 1.89194
+scale = Vector2( 1, 0.5 )
+amount = 100
+local_coords = false
+process_material = SubResource( 15 )
+
+[node name="Particles2D3" type="Particles2D" parent="Player/Sprite"]
+show_behind_parent = true
+position = Vector2( 45, 100 )
+rotation = 1.20428
+scale = Vector2( 1, 0.5 )
+amount = 100
+explosiveness = 0.13
+local_coords = false
+process_material = SubResource( 15 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Player"]
 position = Vector2( 6.20004, 7.87503 )
@@ -142,7 +201,7 @@ margin_left = 24.0
 margin_top = 32.0
 margin_right = 105.0
 margin_bottom = 56.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 7 )
 text = "Health: "
 align = 1
 valign = 1
@@ -155,7 +214,7 @@ margin_left = 896.0
 margin_top = 32.0
 margin_right = 968.0
 margin_bottom = 56.0
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 8 )
 text = "Score:"
 align = 1
 valign = 1
